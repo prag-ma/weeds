@@ -1,88 +1,95 @@
-// load and scale arrays, or get coordinates from image files. scaling should be done within the script, changeable for different screen output sizes.
-// trace these y-coordinates with ellipses at defined speeds.
-// coordinate this with composed music
+/* T O D O:
+ present it as a ritual, reconnecting with something so simple
+ - shape of hand
+ 
+ - scale the files to fit to screen
+ - draw bottom and top of leaf at the same time
+ - experiment with textures
+ - use the veins of the leaves
+ - follow music in some revealing way?
+   - leaf in background, tracing over it in time with sound triggering
+   - make your own song by combining leaf shapes
 
-int x = 0;
-float y = 0;
+ load and scale arrays, or get coordinates from image files. scaling should be done within the script, changeable for different screen output sizes.
+ trace these y-coordinates with ellipses at defined speeds.
+ coordinate this with composed music
+*/
+
+int x1 = 0;
+int x2 = 0;
+
+  // y-coordinates are floats because we need to scale them
+float y1 = 0;
+float y2 = 0;
+
+  // create arrays to store leaf coordinates
 int [] leaf1array;
+int [] leaf2array;
+
 
 void setup(){
-fullScreen();
-leaf1array = int(loadStrings("leaf1.txt"));
-println(leaf1array.length);
-frameRate(300);
-background(0); // put background here instead of draw so that it doesn't refresh
+  
+  fullScreen();
+  
+    // leaf coordinate .txt files are gathered from images using "leaf_tracer.pde"
+  leaf1array = int(loadStrings("leaf1.txt"));
+  leaf2array = int(loadStrings("leaf2.txt"));
+  
+  frameRate(300);
+  
+    // put background in setup instead of draw so that it doesn't refresh, leaving a trail of ellipses and giving the effect of live drawing/tracing
+  background(0); 
 }
+
 
 
 void draw(){
 
-// trace image's pixels, make x and y for ellipse equal to them. or use previously made array of pixels to read through?
-// make a class
-// need to resize arrays - it always traces the same small portion
-x = x + 10;
+    // move the x-coordinate by a certain amount ("speed") each frame. 
+  int speed = 1;
+  x1 = x1 + speed;
+  x2 = x2 + speed;
+  
+    // when reaching the end of the leaf trace, restart from the left
+  if (x1 >= leaf1array.length){
+    x1 = 0;
+  }
+  if (x2 >= leaf2array.length){
+    x2 = 0;
+  }
+  
+    // map the corresponding y-coordinates to fit inside the screen. 
+    // needs to be fixed to determine the maximum an minimum values in the array before mapping.
+  int value1 = leaf1array[x1];
+  y1 = map(value1, -1000, 1000, displayHeight, 0);
+  int value2 = leaf2array[x2];
+  y2 = map(value2, -1000, 1000, displayHeight, 0);
+  
+    // make the ellipse green and with no outline.
+  fill(33, 128, 61);
+  noStroke();
 
-if (x >= leaf1array.length){
-  x = 0;
-}
+    // if the x-value has not crossed the width of the screen, draw it now.
+  if (x1 < displayWidth && x1 < leaf1array.length){
+  ellipse(x1, y1, 5, 5);
+  }
+  if (x2 < displayWidth && x2 < leaf2array.length){
+  ellipse(x2, y2, 5, 5);
+  }
 
-int value = leaf1array[x];
-y = map(value, -800, 500, displayHeight, 0);
-// draw multiple dots to follow each other? or lines?
-fill(33, 128, 61);
-noStroke();
-
-if (x < displayWidth && x < leaf1array.length){
-ellipse(x, y, 5, 5);
-}
-if (x == displayWidth){
-background(0);
-}
-if (x > displayWidth && x < leaf1array.length){
-ellipse(x - displayWidth, y, 5, 5);
-}
-if (x == displayWidth*2){
-background(0);
-}
-if (x > displayWidth*2 && x < leaf1array.length){
-ellipse(x - displayWidth*2, y, 5, 5);
-}
-if (x == displayWidth*3){
-background(0);
-}
-if (x > displayWidth*3 && x < leaf1array.length){
-ellipse(x - displayWidth*3, y, 5, 5);
-}
-if (x == displayWidth*4){
-background(0);
-}
-if (x > displayWidth*4 && x < leaf1array.length){
-ellipse(x - displayWidth*4, y, 5, 5);
-}
-if (x == displayWidth*5){
-background(0);
-}
-if (x > displayWidth*5 && x < leaf1array.length){
-ellipse(x - displayWidth*5, y, 5, 5);
-}
-if (x == displayWidth*6){
-background(0);
-}
-if (x > displayWidth*6 && x < leaf1array.length){
-ellipse(x - displayWidth*6, y, 5, 5);
-}
-if (x == displayWidth*7){
-background(0);
-}
-if (x > displayWidth*7 && x < leaf1array.length){
-ellipse(x - displayWidth*7, y, 5, 5);
-}
-if (x == displayWidth*8){
-background(0);
-}
-if (x > displayWidth*8 && x < leaf1array.length){
-ellipse(x - displayWidth*8, y, 5, 5);
-}
-
-
+    // if the x-value has already crossed the screen once, keep drawing it but clear each successive frame before beginning to draw again from the left.
+  for (int i = 1; i < 10; i++){
+    if (x1 == displayWidth*i){
+    background(0);
+    }
+    if (x1 > displayWidth*i && x1 < leaf1array.length){
+    ellipse(x1 - displayWidth*i, y1, 5, 5);
+    }
+    if (x2 == displayWidth*i){
+    background(0);
+    }
+    if (x2 > displayWidth*i && x2 < leaf2array.length){
+    ellipse(x2 - displayWidth*i, y2, 5, 5);
+    } 
+  }
 }
