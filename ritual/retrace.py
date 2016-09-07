@@ -12,13 +12,10 @@ x imr
 from __future__ import print_function
 import os
 
-trace = '/newleaves/leaf1/leaf1.txt'
-
 def fname(leaf):
     cwd = os.getcwd()
     TOP = cwd + '/newleaves'
     path = TOP + '/leaf' + str(leaf)
-    # base = os.path.basename('leaf' + str(leaf) + '.txt')
     base = 'leaf' + str(leaf) + '.txt'
     print(path)
     print(base)
@@ -35,7 +32,8 @@ def count_lines(trace):
     ln_cnt = sum (1 for line in open(trace))
     return ln_cnt
 
-def file2signal(file):
+def trace2signal(trace):
+    ''' Read file into an array '''
     signal = []
     with open(file) as fp:
         for line in fp:
@@ -43,13 +41,25 @@ def file2signal(file):
             signal.append(line)
     return signal
 
-def invert_trace(signal):
+def zero_crossing(signal):
+    ''' Scan a vector, return the index at which the zero point is crossed '''
+    cnt = 0
+    for i in signal:
+        while (cnt >= 0):
+            cnt += 1
+        # Found the zero crossing when the array drops below zero
+        zero_crossing_index = cnt
+        break
+    return zero_crossing_index
+
+def invert(signal):
     # Get length of trace
     ln_cnt = count_lines(signal)
 
     # Init array for second half of trace
     half = int(ln_cnt / 2)
     # j = np.array((1, ln_cnt - half))
+    # XXX: half = zero_crossing(signal)
 
     # Slice the 2nd half & reverse it
     a_fwd = signal[half:]
@@ -73,8 +83,14 @@ def main():
         print(leaf)
         trace = fname(leaf)
         check_file_exists(trace)
-        file2signal(trace)
-        invert_trace(trace)
+        signal = trace2signal(trace)
+        invert(signal)
+
+def test():
+    x = [0,2,4,-1,-2,-3]
+    zero_crossing_index = zero_crossing(x)
+    print zero_crossing_index
 
 if __name__ == '__main__':
-    main()
+    # main()
+    test()
