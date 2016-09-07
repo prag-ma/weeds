@@ -47,35 +47,24 @@ def zero_crossing(signal):
     for i in signal:
         while (cnt >= 0):
             cnt += 1
-        # Found the zero crossing when the array drops below zero
+        # Zero crossing is found when the signal drops below zero
         zero_crossing_index = cnt
         break
     return zero_crossing_index
 
 def invert(signal):
+    ''' Invert the 2nd half of the signal'''
     # Get length of trace
     ln_cnt = count_lines(signal)
 
-    # Init array for second half of trace
-    half = int(ln_cnt / 2)
-    # j = np.array((1, ln_cnt - half))
-    # XXX: half = zero_crossing(signal)
+    x = zero_crossing(signal)
 
     # Slice the 2nd half & reverse it
-    a_fwd = signal[half:]
-    print(a_fwd.dtype())
-    a_rev = a_fwd[::-1]
-    print(a_fwd[0])
+    downcycle_fwd = signal[x:]
+    downcycle_rev = downcycle_fwd[::-1]
+    print(downcycle_fwd[0])
     # print(a_fwd[0], a_fwd[-1])
     # print(a_rev[0], a_rev[-1])
-
-
-
-    # with open(file) as fp:
-    #     for i,line in fp:
-    #         # Populate 2nd half array backwards
-    #         if i >= half:
-    #             j[i]
 
 def main():
     leaves = [1] #, 2, 3, 4, 5, 6]
@@ -89,7 +78,7 @@ def main():
 def test():
     x = [0,2,4,-1,-2,-3]
     zero_crossing_index = zero_crossing(x)
-    print zero_crossing_index
+    print(zero_crossing_index)
 
 if __name__ == '__main__':
     # main()
