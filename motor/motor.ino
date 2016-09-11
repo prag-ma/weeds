@@ -33,10 +33,11 @@ void setup() {
   pinMode(motorPin2, OUTPUT);
   pinMode(motorPin3, OUTPUT);
   pinMode(motorPin4, OUTPUT);
+//  pinMode(7, OUTPUT);
   Serial.begin(9600);
+  // set digital pin to 0 to send a ground signal to the adafruit soundboard, to start it playing the loop
+//  pinMode(7, LOW);
 }
-
-
 
 void loop(){
   count++;
@@ -47,11 +48,9 @@ void loop(){
     setOutput(i);
     delayMicroseconds(motorSpeed);
     // save <count> to EEPROM
-    EEPROM.write(addr, count)
-    Serial.println(count);
+    //Serial.println(count);
   }
   if (count == countsperrev){
-    Serial.println("Revolution! Play >");
     # TODO: Play/resync audio here
     count = 0;
   }
