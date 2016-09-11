@@ -39,9 +39,10 @@ void draw() {
       float b = blue(img.pixels[loc]);
       
       // if the pixel is black, 
-      if (r == 0 && g == 0 && b == 0){
+      // if (r == 0 && g == 0 && b == 0){
+      if (r < 255){
         // change this value to stabilize the zero-crossing - if the first value in the array should be zero, and represent the middle of the image, use that value here.
-        int first = 0;
+        int first = 119;
         // turn the measured pixels red in order to check that the function is working.
         pixels[loc] = color(255, 0, 0);
         // store the y-value in the array
