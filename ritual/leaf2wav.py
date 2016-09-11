@@ -11,6 +11,7 @@ x imr
 
 
 from __future__ import division
+# import argumentparser as argparse
 import numpy as np
 import struct
 import wave
@@ -64,18 +65,18 @@ def wavWrite(arr, wpath, wname, fs, durtot):
             print "WARNING: MAX_INT EXCEEDED @ signal[",s,"] >> CLIP!"
         else:
             wav.writeframes(struct.pack('h', int(signal[s])))
+    print "Congratulations!\nYou won a wav...\n", wpath + '/' + os.path.basename(wname)
     wav.close()
 
-
-if __name__ == '__main__':
+def main():
     # wav parameters
     fs = 2000
     durtot = 10*fs
     MAX_INT16 = 32767
     MAX_INT12 = 2047
-    # MAX_INT8 = 127
-    bits = 12
-    MAX_INT = MAX_INT12
+    MAX_INT8 = 127
+    bits = 16
+    MAX_INT = MAX_INT16
 
     wpath = '/' #'/home/imr/Desktop/git/weeds/'
 
@@ -86,8 +87,10 @@ if __name__ == '__main__':
     #     leaves.append(newleaf)
     # # leaves = ['/home/imr/Downloads/array.txt']
 
-    leaves = ['/home/imr/Desktop/git/weeds/newleaves/leaf1/leaf1.txt']
-    for leaf in leaves:
+    data_dir = '/home/imr/Desktop/git/weeds/newleaves'
+    leaves = ['07'] #, '08', '09', '10']
+    for i in leaves:
+        leaf = data_dir + '/leaf' + str(i) + '/leaf' + str(i) + '.txt'
         signal = file2signal(leaf, durtot)
         wname = leaf.split('.')[0] + '_fs' + str(fs) + '_b' + str(bits) + '.wav'
         wname = os.path.basename(wname)
@@ -97,3 +100,10 @@ if __name__ == '__main__':
         # Normalise signal and write as wav
         signal = normalise(signal, MAX_INT)
         wav = wavWrite(signal, wpath, wname, fs, durtot)
+
+if __name__ == '__main__':
+    # parser = ap.ArgumentParser(description="Leaf sonification")
+    # parser.add_argument('--leaves', '-l', type=str, required=False, nargs='+')
+    # parsed = parser.parse_args()
+    # leaves = parsed.leaves
+    main()
