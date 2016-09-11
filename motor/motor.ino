@@ -1,4 +1,4 @@
-/* 
+/*
 
 Kingdom of Weeds
 2016
@@ -6,10 +6,10 @@ Erica Jewell
 
 Adapted from http://www.4tronix.co.uk/arduino/Stepper-Motors.php
 
-"[Unidirectional] operation of a 28BYJ-48, using a ULN2003 interface board 
-to drive the stepper. The 28BYJ-48 motor is a 4-phase, 8-beat motor, 
-geared down by a factor of 68. One bipolar winding is on motor pins 1 & 3 and 
-the other on motor pins 2 & 4. The step angle is 5.625/64 and the operating 
+"[Unidirectional] operation of a 28BYJ-48, using a ULN2003 interface board
+to drive the stepper. The 28BYJ-48 motor is a 4-phase, 8-beat motor,
+geared down by a factor of 68. One bipolar winding is on motor pins 1 & 3 and
+the other on motor pins 2 & 4. The step angle is 5.625/64 and the operating
 Frequency is 100pps. Current draw is 92mA."
 
 */
@@ -35,7 +35,6 @@ void setup() {
   pinMode(motorPin4, OUTPUT);
 //  pinMode(7, OUTPUT);
   Serial.begin(9600);
-  
   // set digital pin to 0 to send a ground signal to the adafruit soundboard, to start it playing the loop
 //  pinMode(7, LOW);
 }
@@ -52,7 +51,7 @@ void loop(){
     //Serial.println(count);
   }
   if (count == countsperrev){
-    Serial.println("revolution");
+    # TODO: Play/resync audio here
     count = 0;
   }
 }
