@@ -11,6 +11,7 @@ x imr
 
 
 from __future__ import division
+# import argumentparser as argparse
 import numpy as np
 import struct
 import wave
@@ -46,7 +47,7 @@ def normalise(x, MAX_INT):
     return norm
 
 
-def wavWrite(arr, wpath, wname, fs, durtot):
+def wavWrite(signal, wpath, wname, fs, durtot, MAX_INT):
     '''Write mono .wav file of input signal'''
     # Set the .wav parameters
     nchannels = 1
@@ -64,36 +65,37 @@ def wavWrite(arr, wpath, wname, fs, durtot):
             print "WARNING: MAX_INT EXCEEDED @ signal[",s,"] >> CLIP!"
         else:
             wav.writeframes(struct.pack('h', int(signal[s])))
+    print "Congratulations!\nYou won a wav...\n", wpath + '/' + os.path.basename(wname)
     wav.close()
 
-
-if __name__ == '__main__':
+def main():
     # wav parameters
-    fs = 2000
+    fs = 44100
     durtot = 10*fs
     MAX_INT16 = 32767
     MAX_INT12 = 2047
-    # MAX_INT8 = 127
-    bits = 12
-    MAX_INT = MAX_INT12
+    MAX_INT8 = 127
+    bits = 16
+    MAX_INT = MAX_INT16
 
-    wpath = '/' #'/home/imr/Desktop/git/weeds/'
-
-    # Convert each leaf to a signal array
-    # leaves = []
-    # for n in range(2,7):
-    #     newleaf = '/home/imr/Desktop/git/weeds/newleaves/leaf' + str(n) + '/leaf' + str(n) + '.txt'
-    #     leaves.append(newleaf)
-    # # leaves = ['/home/imr/Downloads/array.txt']
-
-    leaves = ['/home/imr/Desktop/git/weeds/newleaves/leaf1/leaf1.txt']
-    for leaf in leaves:
+    ritual_dir = os.path.dirname(os.path.realpath(__file__))
+    data_dir = ritual_dir + '/newleaves'
+    leaves = ['1'] #, '08', '09', '10']
+    for i in leaves:
+        leaf = data_dir + '/leaf' + str(i) + '/leaf' + str(i) + '.txt'
         signal = file2signal(leaf, durtot)
         wname = leaf.split('.')[0] + '_fs' + str(fs) + '_b' + str(bits) + '.wav'
         wname = os.path.basename(wname)
         wpath = os.path.dirname(leaf)
-        # print wpath,wname
 
         # Normalise signal and write as wav
         signal = normalise(signal, MAX_INT)
-        wav = wavWrite(signal, wpath, wname, fs, durtot)
+        wav = wavWrite(signal, wpath, wname, fs, durtot, MAX_INT)
+
+
+if __name__ == '__main__':
+    # parser = ap.ArgumentParser(description="Leaf sonification")
+    # parser.add_argument('--leaves', '-l', type=str, required=False, nargs='+')
+    # parsed = parser.parse_args()
+    # leaves = parsed.leaves
+    main()
