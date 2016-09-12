@@ -23,8 +23,11 @@ def file2signal(file, durtot):
     signal = []
     with open(file) as fp:
         for line in fp:
-            line = int(line)
-            signal.append(line)
+            if len(line.strip('\n')) > 0:
+                line = int(line)
+                signal.append(line)
+            else:
+                pass
 
     siglen = len(signal)
     repeats = durtot / siglen
@@ -70,7 +73,7 @@ def wavWrite(signal, wpath, wname, fs, durtot, MAX_INT):
 
 def main():
     # wav parameters
-    fs = 44100
+    fs = 8000
     durtot = 10*fs
     MAX_INT16 = 32767
     MAX_INT12 = 2047
@@ -80,7 +83,7 @@ def main():
 
     ritual_dir = os.path.dirname(os.path.realpath(__file__))
     data_dir = ritual_dir + '/newleaves'
-    leaves = ['1'] #, '08', '09', '10']
+    leaves = ['07', '08', '09', '10']
     for i in leaves:
         leaf = data_dir + '/leaf' + str(i) + '/leaf' + str(i) + '.txt'
         signal = file2signal(leaf, durtot)
