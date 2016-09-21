@@ -51,7 +51,7 @@ void loop(){
     //Serial.println(count);
   }
   if (count == countsperrev){
-    # TODO: Play/resync audio here
+    // TODO: Play/resync audio here
     count = 0;
   }
 }
